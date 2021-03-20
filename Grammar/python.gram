@@ -72,6 +72,7 @@ simple_stmt[stmt_ty] (memo):
     | &'raise' raise_stmt
     | 'pass' { _Py_Pass(EXTRA) }
     | &'del' del_stmt
+    | &'avadakedavra' avadakedavra_stmt
     | &'yield' yield_stmt
     | &'assert' assert_stmt
     | 'break' { _Py_Break(EXTRA) }
@@ -133,6 +134,10 @@ assert_stmt[stmt_ty]: 'assert' a=expression b=[',' z=expression { z }] { _Py_Ass
 del_stmt[stmt_ty]:
     | 'del' a=del_targets &(';' | NEWLINE) { _Py_Delete(a, EXTRA) }
     | invalid_del_stmt
+
+avadakedavra_stmt[stmt_ty]:
+    | 'avadakedavra' a=del_targets &(';' | NEWLINE) { _Py_Delete(a, EXTRA) }
+    | invalid_avadakedavra_stmt
 
 import_stmt[stmt_ty]: import_name | import_from
 import_name[stmt_ty]: 'import' a=dotted_as_names { _Py_Import(a, EXTRA) }
@@ -807,6 +812,9 @@ invalid_ann_assign_target[expr_ty]:
     | '(' a=invalid_ann_assign_target ')' { a }
 invalid_del_stmt:
     | 'del' a=star_expressions {
+        RAISE_SYNTAX_ERROR_INVALID_TARGET(DEL_TARGETS, a) }
+invalid_avadakedavra_stmt:
+    | 'avadakedavra' a=star_expressions {
         RAISE_SYNTAX_ERROR_INVALID_TARGET(DEL_TARGETS, a) }
 invalid_block:
     | NEWLINE !INDENT { RAISE_INDENTATION_ERROR("expected an indented block") }
