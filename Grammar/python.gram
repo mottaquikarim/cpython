@@ -70,6 +70,7 @@ simple_stmt[stmt_ty] (memo):
     | &('import' | 'from') import_stmt
     | &('accio' | 'from') accio_stmt
     | &'raise' raise_stmt
+    | &'wingardium_leviosa' wingardium_leviosa_stmt
     | 'pass' { _Py_Pass(EXTRA) }
     | &'del' del_stmt
     | &'avadakedavra' avadakedavra_stmt
@@ -338,6 +339,9 @@ return_stmt[stmt_ty]:
 raise_stmt[stmt_ty]:
     | 'raise' a=expression b=['from' z=expression { z }] { _Py_Raise(a, b, EXTRA) }
     | 'raise' { _Py_Raise(NULL, NULL, EXTRA) }
+wingardium_leviosa_stmt[stmt_ty]:
+    | 'wingardium_leviosa' a=expression b=['from' z=expression { z }] { _Py_Raise(a, b, EXTRA) }
+    | 'wingardium_leviosa' { _Py_Raise(NULL, NULL, EXTRA) }
 
 function_def[stmt_ty]:
     | d=decorators f=function_def_raw { _PyPegen_function_def_decorators(p, d, f) }
