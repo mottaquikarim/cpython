@@ -122,6 +122,7 @@ augassign[AugOperator*]:
     | '>>=' { _PyPegen_augoperator(p, RShift) }
     | '**=' { _PyPegen_augoperator(p, Pow) }
     | '//=' { _PyPegen_augoperator(p, FloorDiv) }
+    | '~~=' { _PyPegen_augoperator(p, RootDiv) }
 
 global_stmt[stmt_ty]: 'global' a[asdl_expr_seq*]=','.NAME+ {
     _Py_Global(CHECK(asdl_identifier_seq*, _PyPegen_map_names_to_ids(p, a)), EXTRA) }
@@ -591,6 +592,7 @@ term[expr_ty]:
     | a=term '*' b=factor { _Py_BinOp(a, Mult, b, EXTRA) }
     | a=term '/' b=factor { _Py_BinOp(a, Div, b, EXTRA) }
     | a=term '//' b=factor { _Py_BinOp(a, FloorDiv, b, EXTRA) }
+    | a=term '~~' b=factor { _Py_BinOp(a, RootDiv, b, EXTRA) }
     | a=term '%' b=factor { _Py_BinOp(a, Mod, b, EXTRA) }
     | a=term '@' b=factor { CHECK_VERSION(expr_ty, 5, "The '@' operator is", _Py_BinOp(a, MatMult, b, EXTRA)) }
     | factor

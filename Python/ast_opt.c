@@ -253,6 +253,9 @@ fold_binop(expr_ty node, PyArena *arena, _PyASTOptimizeState *state)
     case FloorDiv:
         newval = PyNumber_FloorDivide(lv, rv);
         break;
+    case RootDiv:
+        newval = PyNumber_FloorDivide(lv, rv);
+        break;
     case Mod:
         newval = safe_mod(lv, rv);
         break;

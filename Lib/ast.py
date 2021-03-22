@@ -1337,6 +1337,7 @@ class _Unparser(NodeVisitor):
         "BitXor": "^",
         "BitAnd": "&",
         "FloorDiv": "//",
+        "RootDiv": "~~",
         "Pow": "**",
     }
 

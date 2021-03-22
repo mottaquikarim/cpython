@@ -59,18 +59,20 @@ extern "C" {
 #define DOUBLESTAREQUAL 46
 #define DOUBLESLASH     47
 #define DOUBLESLASHEQUAL 48
-#define AT              49
-#define ATEQUAL         50
-#define RARROW          51
-#define ELLIPSIS        52
-#define COLONEQUAL      53
-#define OP              54
-#define AWAIT           55
-#define ASYNC           56
-#define TYPE_IGNORE     57
-#define TYPE_COMMENT    58
-#define ERRORTOKEN      59
-#define N_TOKENS        63
+#define ROOT            49
+#define ROOTEQUAL       50
+#define AT              51
+#define ATEQUAL         52
+#define RARROW          53
+#define ELLIPSIS        54
+#define COLONEQUAL      55
+#define OP              56
+#define AWAIT           57
+#define ASYNC           58
+#define TYPE_IGNORE     59
+#define TYPE_COMMENT    60
+#define ERRORTOKEN      61
+#define N_TOKENS        65
 #define NT_OFFSET       256
 
 /* Special definitions for cooperation with parser */
