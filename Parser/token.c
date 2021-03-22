@@ -55,6 +55,8 @@ const char * const _PyParser_TokenNames[] = {
     "DOUBLESTAREQUAL",
     "DOUBLESLASH",
     "DOUBLESLASHEQUAL",
+    "ROOT",
+    "ROOTEQUAL",
     "AT",
     "ATEQUAL",
     "RARROW",
@@ -185,6 +187,11 @@ PyToken_TwoChars(int c1, int c2)
         case '=': return VBAREQUAL;
         }
         break;
+    case '~':
+        switch (c2) {
+        case '~': return ROOT;
+        }
+        break;
     }
     return OP;
 }
@@ -234,6 +241,15 @@ PyToken_ThreeChars(int c1, int c2, int c3)
         case '>':
             switch (c3) {
             case '=': return RIGHTSHIFTEQUAL;
+            }
+            break;
+        }
+        break;
+    case '~':
+        switch (c2) {
+        case '~':
+            switch (c3) {
+            case '=': return ROOTEQUAL;
             }
             break;
         }

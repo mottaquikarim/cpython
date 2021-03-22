@@ -181,6 +181,14 @@
 
    Token value for ``"//="``.
 
+.. data:: ROOT
+
+   Token value for ``"~~"``.
+
+.. data:: ROOTEQUAL
+
+   Token value for ``"~~="``.
+
 .. data:: AT
 
    Token value for ``"@"``.

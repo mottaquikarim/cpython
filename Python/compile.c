@@ -953,6 +953,7 @@ stack_effect(int opcode, int oparg, int jump)
         case BINARY_ADD:
         case BINARY_SUBTRACT:
         case BINARY_SUBSCR:
+        //case BINARY_ROOT_DIVIDE:
         case BINARY_FLOOR_DIVIDE:
         case BINARY_TRUE_DIVIDE:
             return -1;
@@ -3542,6 +3543,8 @@ binop(operator_ty op)
         return BINARY_AND;
     case FloorDiv:
         return BINARY_FLOOR_DIVIDE;
+    case RootDiv:
+        return BINARY_FLOOR_DIVIDE;
     default:
         PyErr_Format(PyExc_SystemError,
             "binary op %d should not be possible", op);
@@ -3578,6 +3581,8 @@ inplace_binop(operator_ty op)
     case BitAnd:
         return INPLACE_AND;
     case FloorDiv:
+        return INPLACE_FLOOR_DIVIDE;
+    case RootDiv:
         return INPLACE_FLOOR_DIVIDE;
     default:
         PyErr_Format(PyExc_SystemError,

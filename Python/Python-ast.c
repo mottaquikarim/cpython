@@ -117,6 +117,8 @@ struct ast_state {
     PyObject *RShift_type;
     PyObject *Raise_type;
     PyObject *Return_type;
+    PyObject *RootDiv_singleton;
+    PyObject *RootDiv_type;
     PyObject *SetComp_type;
     PyObject *Set_type;
     PyObject *Slice_type;
@@ -384,6 +386,8 @@ void _PyAST_Fini(PyInterpreterState *interp)
     Py_CLEAR(state->RShift_type);
     Py_CLEAR(state->Raise_type);
     Py_CLEAR(state->Return_type);
+    Py_CLEAR(state->RootDiv_singleton);
+    Py_CLEAR(state->RootDiv_type);
     Py_CLEAR(state->SetComp_type);
     Py_CLEAR(state->Set_type);
     Py_CLEAR(state->Slice_type);
@@ -1708,7 +1712,7 @@ init_types(struct ast_state *state)
     if (!state->Or_singleton) return 0;
     state->operator_type = make_type(state, "operator", state->AST_type, NULL,
                                      0,
-        "operator = Add | Sub | Mult | MatMult | Div | Mod | Pow | LShift | RShift | BitOr | BitXor | BitAnd | FloorDiv");
+        "operator = Add | Sub | Mult | MatMult | Div | Mod | Pow | LShift | RShift | BitOr | BitXor | BitAnd | FloorDiv | RootDiv");
     if (!state->operator_type) return 0;
     if (!add_attributes(state, state->operator_type, NULL, 0)) return 0;
     state->Add_type = make_type(state, "Add", state->operator_type, NULL, 0,
@@ -1801,6 +1805,14 @@ init_types(struct ast_state *state)
                                                   *)state->FloorDiv_type, NULL,
                                                   NULL);
     if (!state->FloorDiv_singleton) return 0;
+    state->RootDiv_type = make_type(state, "RootDiv", state->operator_type,
+                                    NULL, 0,
+        "RootDiv");
+    if (!state->RootDiv_type) return 0;
+    state->RootDiv_singleton = PyType_GenericNew((PyTypeObject
+                                                 *)state->RootDiv_type, NULL,
+                                                 NULL);
+    if (!state->RootDiv_singleton) return 0;
     state->unaryop_type = make_type(state, "unaryop", state->AST_type, NULL, 0,
         "unaryop = Invert | Not | UAdd | USub");
     if (!state->unaryop_type) return 0;
@@ -4755,6 +4767,9 @@ PyObject* ast2obj_operator(struct ast_state *state, operator_ty o)
         case FloorDiv:
             Py_INCREF(state->FloorDiv_singleton);
             return state->FloorDiv_singleton;
+        case RootDiv:
+            Py_INCREF(state->RootDiv_singleton);
+            return state->RootDiv_singleton;
     }
     Py_UNREACHABLE();
 }
@@ -9148,6 +9163,14 @@ obj2ast_operator(struct ast_state *state, PyObject* obj, operator_ty* out,
         *out = FloorDiv;
         return 0;
     }
+    isinstance = PyObject_IsInstance(obj, state->RootDiv_type);
+    if (isinstance == -1) {
+        return 1;
+    }
+    if (isinstance) {
+        *out = RootDiv;
+        return 0;
+    }
 
     PyErr_Format(PyExc_TypeError, "expected some sort of operator, but got %R", obj);
     return 1;
@@ -10435,6 +10458,9 @@ astmodule_exec(PyObject *m)
         return -1;
     }
     if (PyModule_AddObjectRef(m, "FloorDiv", state->FloorDiv_type) < 0) {
+        return -1;
+    }
+    if (PyModule_AddObjectRef(m, "RootDiv", state->RootDiv_type) < 0) {
         return -1;
     }
     if (PyModule_AddObjectRef(m, "unaryop", state->unaryop_type) < 0) {

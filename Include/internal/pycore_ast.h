@@ -117,6 +117,8 @@ struct ast_state {
     PyObject *RShift_type;
     PyObject *Raise_type;
     PyObject *Return_type;
+    PyObject *RootDiv_singleton;
+    PyObject *RootDiv_type;
     PyObject *SetComp_type;
     PyObject *Set_type;
     PyObject *Slice_type;
